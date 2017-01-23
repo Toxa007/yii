@@ -29,7 +29,7 @@ $this->beginPage();
         'method' => 'get',
         'options' => ['class' => 'navbar-form navbar-right'],
     ]);
-    echo '<div class = "input-group input-group-sm">';
+    echo '<div class="input-group input-group-sm">';
     echo Html::input(
         'type:text',
         'search',
@@ -39,7 +39,7 @@ $this->beginPage();
             'class' => 'form-control'
         ]
     );
-    echo '<span class="input-group-btn>';
+    echo '<span class="input-group-btn">';
     echo Html::submitButton(
         '<span class="glyphicon glyphicon-search"></span>',
         [
@@ -56,7 +56,7 @@ $this->beginPage();
 </div>
 <footer class="footer">
     <div class="container">
-        <span class="badge"
+        <span class="badge">
               <span class="glyphicon glyphicon-copyright-mark"></span> Toxa <?= date("Y") ?>
         </span>
     </div>
