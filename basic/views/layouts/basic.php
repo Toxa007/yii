@@ -3,6 +3,9 @@ use app\assets\AppAsset;
 use yii\bootstrap\NavBar;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
+use yii\bootstrap\Nav;
+use yii\bootstrap\Modal;
+use app\components\AlertWidget;
 
 AppAsset::register($this);
 $this->beginPage();
@@ -22,10 +25,18 @@ $this->beginPage();
     NavBar::begin(
         [
             'brandLabel' => 'TestApp',
+            'renderInnerContainer' => true,
+            'innerContainerOptions' => [
+                'class' => 'container'
+            ],
+            'brandUrl' => ['main/index'],
+            'brandOptions' => [
+                'class' => 'navbar-brand'
+            ]
         ]
     );
     ActiveForm::begin([
-       'action' => ['main/search'],
+       'action' => ['/search'],
         'method' => 'get',
         'options' => ['class' => 'navbar-form navbar-right'],
     ]);
@@ -43,14 +54,54 @@ $this->beginPage();
     echo Html::submitButton(
         '<span class="glyphicon glyphicon-search"></span>',
         [
-            'class' => 'btn btn-success'
+            'class' => 'btn btn-success',
+            'onClick' => 'window.location.href = this.form.action + "-" + this.form.search.value.replace(/[^\w\а-яё\А-ЯЁ]+/g,"_") + ".html";'
         ]
     );
     echo '</span></div>';
     ActiveForm::end();
+
+    echo Nav::widget([
+        'items' => [
+            [
+                'label' => 'Main <span class="glyphicon glyphicon-home"></span>',
+                'url' => ['main/index'],
+            ],
+            [
+                'label' => 'From box <span class="glyphicon glyphicon-inbox"></span>',
+                'items' => [
+                    '<li class="dropdown-header">Extensions</li>',
+                    '<li class="divider"></li>',
+                    [
+                        'label' => 'Widgets show',
+                        'url' => ['widget-test/index'],
+
+                    ]
+                ]
+            ],
+            '<li>
+                <a data-toggle="modal" data-target="#modal" style="cursor:pointer">About <span class="glyphicon glyphicon-question-sign"></span>
+                </a>
+            </li>',
+
+        ],
+        'encodeLabels' => false,
+        'options' => [
+            'class' => 'navbar-nav navbar-right'
+        ]
+    ]);
+
+    Modal::begin([
+       'header' => '<h2>About</h2>',
+       'id' => 'modal'
+    ]);
+    echo "ololo ololo ololo";
+    Modal::end();
+
     NavBar::end();
     ?>
     <div class="container">
+        <?= AlertWidget::widget() ?>
         <?= $content ?>
     </div>
 </div>

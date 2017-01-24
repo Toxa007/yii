@@ -6,8 +6,8 @@ use Yii;
 
 class MainController extends \yii\web\Controller
 {
-    public $layout = 'basic';
-    public $defaultAction = 'index';
+    //public $layout = 'basic';
+    //public $defaultAction = 'index';
 
     public function actionIndex()
     {
@@ -19,10 +19,20 @@ class MainController extends \yii\web\Controller
             );
     }
 
-    public function actionSearch()
+    public function actionSearch($search = null)
     {
-        //$search = Yii::$app->request->post('search');
-        $search = Yii::$app->request->get('search');
+        if($search){
+            Yii::$app->session->setFlash(
+                'success',
+                'Search result'
+            );
+        }
+        else{
+            Yii::$app->session->setFlash(
+                'error',
+                'Search form not filled'
+            );
+        }
         return $this->render('search',
             [
                 'search' => $search,
