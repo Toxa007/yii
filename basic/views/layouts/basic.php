@@ -13,6 +13,7 @@ $this->beginPage();
 <!DOCTYPE html>
 <html lang="<?=Yii::$app->language ?>" xmlns="http://www.w3.org/1999/html">
 <head>
+    <?= Html::csrfMetaTags() ?>
     <meta charset="<?=Yii::$app->charset ?>">
     <?php $this->registerMetaTag(['name'=>'viewport', 'content'=> 'width=devide-width, initial-scale=1']); ?>
     <title><?=Yii::$app->name ?></title>
@@ -29,14 +30,47 @@ $this->beginPage();
             'innerContainerOptions' => [
                 'class' => 'container'
             ],
-            'brandUrl' => ['main/index'],
+            'brandUrl' => ['/main/index'],
             'brandOptions' => [
                 'class' => 'navbar-brand'
             ]
         ]
     );
+    $menuItems = [
+        [
+            'label' => 'From box <span class="glyphicon glyphicon-inbox"></span>',
+            'items' => [
+                '<li class="dropdown-header">Extensions</li>',
+                '<li class="divider"></li>',
+                [
+                    'label' => 'Widgets show',
+                    'url' => ['widget-test/index'],
+
+                ]
+            ]
+        ],
+        '<li>
+                <a data-toggle="modal" data-target="#modal" style="cursor:pointer">About <span class="glyphicon glyphicon-question-sign"></span>
+                </a>
+            </li>',
+    ];
+    if(Yii::$app->user->isGuest){
+        $menuItems[] =['label' => 'Register', 'url' => ['/main/reg']];
+        $menuItems[] = ['label' => 'Login','url' => ['/main/login']];
+    }
+    else{
+        $menuItems[] = ['label'=> 'Logout ('.Yii::$app->user->identity['username'].')', 'url'=> ['/main/logout'], 'linkOptions' => ['data-method' => 'post']];
+    }
+
+    echo Nav::widget([
+        'items' => $menuItems,
+        'encodeLabels' => false,
+        'options' => [
+            'class' => 'navbar-nav navbar-right'
+        ]
+    ]);
     ActiveForm::begin([
-       'action' => ['/search'],
+        'action' => ['/search'],
         'method' => 'get',
         'options' => ['class' => 'navbar-form navbar-right'],
     ]);
@@ -60,37 +94,6 @@ $this->beginPage();
     );
     echo '</span></div>';
     ActiveForm::end();
-
-    echo Nav::widget([
-        'items' => [
-            [
-                'label' => 'Main <span class="glyphicon glyphicon-home"></span>',
-                'url' => ['main/index'],
-            ],
-            [
-                'label' => 'From box <span class="glyphicon glyphicon-inbox"></span>',
-                'items' => [
-                    '<li class="dropdown-header">Extensions</li>',
-                    '<li class="divider"></li>',
-                    [
-                        'label' => 'Widgets show',
-                        'url' => ['widget-test/index'],
-
-                    ]
-                ]
-            ],
-            '<li>
-                <a data-toggle="modal" data-target="#modal" style="cursor:pointer">About <span class="glyphicon glyphicon-question-sign"></span>
-                </a>
-            </li>',
-
-        ],
-        'encodeLabels' => false,
-        'options' => [
-            'class' => 'navbar-nav navbar-right'
-        ]
-    ]);
-
     Modal::begin([
        'header' => '<h2>About</h2>',
        'id' => 'modal'
